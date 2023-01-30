@@ -1,8 +1,20 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import {WithStyle} from '../components/WithStyle';
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { WithStyle } from "../components/WithStyle";
+import JSONPretty from "react-json-pretty";
 
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { INextPageProps } from "../abstracts/INextPageProps";
+
+export async function getStaticProps({ locale }: INextPageProps) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      // Will be passed to the page component as props
+    },
+  };
+}
 export default function Home() {
   return (
     <div className={styles.container}>
@@ -17,15 +29,15 @@ export default function Home() {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p className={styles.description}>
-          Next 13 playground
-        </p>
+        <p className={styles.description}>Next 13 playground</p>
 
         <div className={styles.grid}>
-         <WithStyle/>
-
-
+          <WithStyle />
         </div>
+        <p>
+          {" "}
+          <JSONPretty data={JSON.parse('{ "A": 1 }')} />
+        </p>
       </main>
 
       <footer className={styles.footer}>
@@ -34,12 +46,12 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
+  );
 }
